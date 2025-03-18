@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from api_ecommerce.api import serializers
 from api_ecommerce import models
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.response import Response
 
 class CategoriaViewSet(viewsets.ModelViewSet):
     queryset = models.Categoria.objects.all()
