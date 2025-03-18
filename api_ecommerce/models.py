@@ -32,6 +32,16 @@ class Anuncio(models.Model):
     descricao = models.TextField(max_length=255)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.DO_NOTHING)
     quantidade = models.PositiveIntegerField(default=0)
+    ativo = models.BooleanField(default=True, null=False)
+
+    def desativar(self):
+        """Desativa o anúncio em vez de removê-lo fisicamente."""
+        self.ativo = False
+        self.save()
+
+    def delete(self, *args, **kwargs):
+        """Override do delete para realizar o soft delete."""
+        self.desativar()
 
     def __str__(self):
         return f"{self.produto.nome} - R$ {self.valor}"

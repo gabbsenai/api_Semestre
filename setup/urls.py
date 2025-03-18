@@ -20,6 +20,7 @@ from api_ecommerce.api import viewsets
 from rest_framework import routers, permissions
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from api_ecommerce.views import desativar_anuncio_api
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -34,7 +35,6 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-
 route = routers.DefaultRouter()
 route.register(r'categoria', viewsets.CategoriaViewSet)
 route.register(r'produto', viewsets.ProdutoViewSet)
@@ -45,6 +45,7 @@ route.register(r'recibo', viewsets.ReciboViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(route.urls)),
+    path("anuncio/<int:anuncio_id>/desativar/", desativar_anuncio_api, name="desativar_anuncio"),
 ]
 urlpatterns += [
     path('swaggerjson', schema_view.without_ui(cache_timeout=0), name='schema-json'),
