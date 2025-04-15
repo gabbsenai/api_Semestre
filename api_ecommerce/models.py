@@ -56,3 +56,10 @@ class Recibo(models.Model):
 
     def __str__(self):
         return f"Recibo de {self.anuncio.produto.nome} - {self.data}"
+
+class Carrinho(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.DO_NOTHING)
+    quantidade = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.produto.nome} - Quantidade: {self.quantidade}"
