@@ -1,44 +1,49 @@
-function listarCategoria() {
-    fetch(`http://127.0.0.1:8000/categoria/`)
-    .then(response => response.json())
-    .then(categorias => {
-        const lista = document.getElementById('lista');
-        lista.innerHTML = ''; // limpa a lista antes de adicionar os itens
+function listarProduto() {
+    fetch(`http://127.0.0.1:8000/produto/`)
+        .then(response => response.json())
+        .then(produtos => {
+            const lista = document.getElementById('lista');
+            lista.innerHTML = ''; // limpa a lista antes de adicionar os itens
 
-        categorias.forEach(categoria => {
-            const item = document.createElement('li');
-            item.className = 'list-group-item d-flex justify-content-between align-items-center';
-            item.innerHTML = `
-                <div>
-                    <strong>${categoria.nome}</strong> — ID: ${categoria.id}
-                </div>
-                <div>
-                    <button class="btn btn-sm btn-primary me-2" onclick="editarCategoria(${categoria.id})">Editar</button>
-                    <button class="btn btn-sm btn-danger" onclick="excluirCategoria(${categoria.id}, this)">Excluir</button>
-                </div>`;
-            lista.appendChild(item);
-        });
-    })
-    .catch(error => console.error('Erro ao buscar categorias:', error));
+            produtos.forEach(produto => {
+                const item = document.createElement('li');
+                item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                item.innerHTML = `
+                    <div>
+                        <strong>${produto.nome}</strong> — ID: ${produto.id}
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-primary me-2" onclick="editarProduto(${produto.id})">Editar</button>
+                        <button class="btn btn-sm btn-danger" onclick="deletarProduto(${produto.id}, this)">Excluir</button>
+                    </div>`;
+                lista.appendChild(item);
+            });
+        })
+        .catch(error => console.error('Erro ao buscar produtos:', error));
 }
 
-function deletarCategoria(id, botao) {
-    if (!confirm('Tem certeza que deseja excluir esta categoria?')) return;
+function deletarProduto(id, botao) {
+    if (!confirm('Tem certeza que deseja excluir este produto?')) return;
 
-    fetch(`http://127.0.0.1:8000/categoria/${id}/`, {
+    fetch(`http://127.0.0.1:8000/produto/${id}/`, {
         method: 'DELETE'
     })
     .then(response => {
         if (response.ok) {
-            // Remove o item da tela (pai do botão)
+            // Remove o item da lista
             const item = botao.closest('li');
             if (item) item.remove();
         } else {
-            alert('Erro ao excluir categoria.');
+            alert('Erro ao excluir produto.');
         }
     })
     .catch(error => {
-        console.error('Erro ao excluir categoria:', error);
-        alert('Erro ao excluir categoria.');
+        console.error('Erro ao excluir produto:', error);
+        alert('Erro ao excluir produto.');
     });
+}
+
+function editarProduto(id) {
+    // Você pode implementar isso depois
+    alert(`Função editarProduto ainda não implementada. ID: ${id}`);
 }
