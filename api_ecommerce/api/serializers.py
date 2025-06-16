@@ -33,7 +33,7 @@ class ProdutoNestedSerializer(serializers.ModelSerializer):
         }
 
 class AnuncioSerializer(serializers.ModelSerializer):
-    produto = ProdutoNestedSerializer()
+   
 
     class Meta:
         model = models.Anuncio
@@ -43,18 +43,17 @@ class AnuncioSerializer(serializers.ModelSerializer):
             'valor': {'help_text': 'Preço do produto no anúncio'},
             'descricao': {'help_text': 'Descrição do anúncio'},
             'vendedor': {'help_text': 'Vendedor responsável pelo anúncio (atribuição automática)', 'read_only': True},
-            'quantidade': {'help_text': 'Quantidade disponível no anúncio'},
             'ativo': {'help_text': 'Indica se o anúncio está ativo ou inativo'}
         }
 
     def create(self, validated_data):
-        produto_data = validated_data.pop('produto')
+        
         vendedor_padrao = models.Vendedor.objects.first()
         if vendedor_padrao is None:
             raise serializers.ValidationError("Nenhum vendedor padrão foi encontrado no sistema.")
         
-        produto = models.Produto.objects.create(vendedor=vendedor_padrao, **produto_data)
-        anuncio = models.Anuncio.objects.create(produto=produto, vendedor=vendedor_padrao, **validated_data)
+        
+        anuncio = models.Anuncio.objects.create(vendedor=vendedor_padrao, **validated_data)
         return anuncio
 
 class ReciboSerializer(serializers.ModelSerializer):
@@ -64,7 +63,6 @@ class ReciboSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'id': {'help_text': 'Identificador único do recibo'},
             'anuncio': {'help_text': 'Anúncio relacionado ao recibo. Buscar no get de anuncio'},
-            'vendedor': {'help_text': 'Vendedor responsável pela venda. Buscar no get de vendedor'},
             'descricao': {'help_text': 'Descrição da transação'},
             'data': {'help_text': 'Data da emissão do recibo'}
         }
